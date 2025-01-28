@@ -1,0 +1,134 @@
+import 'dart:ffi';
+
+void main() {
+  List<int> numbers2 = [5, 30, 11, 4, 6, 18, 9, 10, 7];
+  List<int> numbers3 = [3, 2, 4];
+  List<int> numbers4 = [3, 3];
+  print(romanToInt('IX'));
+  // romanToInt('IV');
+}
+
+int romanToInt(String s) {
+  List<String> stringList = s.split('');
+  List<int> intList = [];
+  int sol = 0;
+  Map<String, int> map = {
+    'I': 1,
+    'V': 5,
+    'X': 10,
+    'L': 50,
+    'C': 100,
+    'D': 500,
+    'M': 1000
+  };
+  int prevValue = 0;
+  for (String i in stringList) {
+    intList.add(map[i]!);
+  }
+  print(intList);
+  for (int i in intList) {
+    if (i > prevValue) {
+      sol = sol - prevValue;
+      sol = i - prevValue + sol;
+    } else {
+      sol = sol + i;
+    }
+    prevValue = i;
+  }
+  return sol;
+}
+
+bool isPalindrome(int x) {
+  int reverse = 0;
+  int copy = x;
+
+  while (copy > 0) {
+    final digit = copy % 10;
+    reverse = reverse * 10 + digit;
+    copy = copy ~/ 10;
+  }
+
+  return reverse == x;
+}
+
+// List<int> twoSum(List<int> nums, int target) {
+//   for (int i = 0; i < nums.length; i++) {
+//     for (int j = 0; j < nums.length; j++) {
+//         if (nums[i] + nums[j] == target && i != j) {
+//           List<int> sol = [i, j];
+//           return sol;
+//         }
+//     }
+//   }
+//   return [];
+// }
+
+List<int> twoSum(List<int> numbers, int target) {
+  Map<int, int> mapCheck = {};
+
+  for (int i = 0; i < numbers.length; i++) {
+    int comple = target - numbers[i];
+    if (mapCheck.containsKey(comple)) {
+      return [mapCheck[comple]!, i];
+    }
+    mapCheck[numbers[i]] = i;
+  }
+  return [];
+}
+
+bool containsDuplicate(List<int> nums) {
+  Set<int> setCheck = {};
+  for (int i in nums) {
+    setCheck.add(i);
+  }
+  return nums.length != setCheck.length;
+}
+
+int findSmallest(List<int> nums) {
+  int smallest = nums[0];
+  int smallestIndex = 0;
+  for (int i = 1; i < nums.length; i++) {
+    if (nums[i] < smallest) {
+      smallest = nums[i];
+      smallestIndex = i;
+    }
+  }
+  return smallestIndex;
+}
+
+List<int> sortArray(List<int> numbers) {
+  List<int> newArray = [];
+  List<int> numsCopy = List.castFrom(numbers);
+  while (numsCopy.isNotEmpty) {
+    int smallest = findSmallest(numsCopy);
+    newArray.add(numsCopy[smallest]);
+    numsCopy.removeAt(smallest);
+  }
+  return newArray;
+}
+
+int binSearch(List<int> nums, int num) {
+  int low = 0;
+  int high = nums.length - 1;
+
+  int mid = (low + high) ~/ 2;
+  int guess = mid;
+  while (low <= high) {
+    if (nums[guess] < num) {
+      low = mid + 1;
+      mid = (low + high) ~/ 2;
+      guess = mid;
+    } else if (nums[guess] == num) {
+      return guess;
+    } else {
+      high = mid - 1;
+      mid = (low + high) ~/ 2;
+      guess = mid;
+    }
+  }
+  if (nums[guess] == num) {
+    return guess;
+  } else {
+    return -1;
+  }
+}
